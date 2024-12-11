@@ -1,0 +1,88 @@
+/* Christmas Lights Animation */
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.christmas-lights {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.christmas-light {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: red;
+    animation: blink 2s infinite;
+}
+
+.christmas-light:nth-child(2) {
+    background-color: green;
+    animation-delay: 0.5s;
+}
+
+.christmas-light:nth-child(3) {
+    background-color: yellow;
+    animation-delay: 1s;
+}
+
+.christmas-light:nth-child(4) {
+    background-color: blue;
+    animation-delay: 1.5s;
+}
+
+.christmas-light:nth-child(5) {
+    background-color: white;
+    animation-delay: 2s;
+}
+
+/* Floating Stars Animation */
+@keyframes float {
+    0% { transform: translateY(0); opacity: 1; }
+    50% { transform: translateY(-20px); opacity: 0.8; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+.floating-star {
+    width: 30px;
+    height: 30px;
+    background: url('../images/star.png') no-repeat center center;
+    background-size: contain;
+    animation: float 3s infinite;
+    position: absolute;
+}
+
+.floating-star:nth-child(1) {
+    top: 10%; left: 15%;
+    animation-delay: 0s;
+}
+
+.floating-star:nth-child(2) {
+    top: 20%; left: 50%;
+    animation-delay: 1s;
+}
+
+.floating-star:nth-child(3) {
+    top: 30%; left: 75%;
+    animation-delay: 2s;
+}
+
+.floating-star:nth-child(4) {
+    top: 40%; left: 25%;
+    animation-delay: 3s;
+}
+
+/* Sparkle Text Effect */
+.sparkle-text {
+    color: gold;
+    text-shadow: 0 0 5px #ffd700, 0 0 10px #ffd700, 0 0 20px #ff8c00, 0 0 30px #ff4500;
+    animation: sparkle 1.5s infinite;
+}
+
+@keyframes sparkle {
+    0% { text-shadow: 0 0 5px #ffd700, 0 0 10px #ffd700, 0 0 20px #ff8c00, 0 0 30px #ff4500; }
+    100% { text-shadow: 0 0 5px #ff8c00, 0 0 10px #ff4500, 0 0 20px #ff4500, 0 0 30px #ffd700; }
+}
