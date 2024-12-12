@@ -25,11 +25,6 @@ if (!$wish) {
 
 // If no custom message is provided, fallback to the default message
 $customMessage = $wish['custom_message'] ?? "{$wish['sender_name']} wishes you a Merry Christmas and Happy New Year " . ($wish['year'] ?? date('Y')) . "!";
-
-// Get the current domain dynamically
-$domain = ($_SERVER['HTTPS'] ? 'https' : 'http') . "://{$_SERVER['HTTP_HOST']}";
-$messageUrl = $domain . "/message.php?wish_id=" . $wish_id;
-$encodedMessage = urlencode($customMessage); // URL encode the message for sharing
 ?>
 
 <!DOCTYPE html>
@@ -39,12 +34,22 @@ $encodedMessage = urlencode($customMessage); // URL encode the message for shari
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Christmas Wish</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/animations.css">
+    <link rel="stylesheet" href="assets/css/animatation.css">
     <style>
+        /* Custom styles for the page */
         body {
             background-color: #2e3b4e;
             color: white;
             font-family: 'Arial', sans-serif;
+        }
+
+        .sparkle-text {
+            animation: sparkle 2s infinite alternate;
+        }
+
+        @keyframes sparkle {
+            0% { text-shadow: 0 0 5px #fff, 0 0 10px #ff0000; }
+            100% { text-shadow: 0 0 20px #ff0000, 0 0 30px #ff00ff; }
         }
 
         .btn-social {
@@ -69,46 +74,78 @@ $encodedMessage = urlencode($customMessage); // URL encode the message for shari
             background-color: #FFC107;
             color: white;
         }
+
+        .christmas-lights div {
+            display: inline-block;
+            background-color: #ff0;
+            width: 15px;
+            height: 15px;
+            margin: 3px;
+            border-radius: 50%;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            50% { background-color: #ff4500; }
+        }
     </style>
 </head>
 <body>
 
     <div class="container my-5 text-center">
+        <div class="christmas-lights">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        
         <h1 class="text-success sparkle-text">🎄 Merry Christmas & Happy New Year 🎆</h1>
         <p class="lead text-warning">
             <?= htmlspecialchars($customMessage) ?>
         </p>
-
-        <!-- Display the clickable dynamic link -->
-        <div class="mt-4">
-            <p>Share your wish with the following link:</p>
-            <a href="<?= $messageUrl ?>" target="_blank" class="btn btn-link"><?= $messageUrl ?></a>
+        
+        <div class="floating-stars">
+            <div class="floating-star"></div>
+            <div class="floating-star"></div>
+            <div class="floating-star"></div>
+            <div class="floating-star"></div>
         </div>
 
-        <!-- Share buttons section -->
+        <img src="assets/images/christmas-lights.gif" alt="Christmas Lights" class="img-fluid my-4">
+
+        <!-- Audio for Christmas vibe -->
+        <audio autoplay loop>
+            <source src="assets/sounds/jingle-bells-bells.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+
+        <div class="mt-3">
+            <button class="btn btn-primary" onclick="shareOptions()">Share Your Wish</button>
+        </div>
+
+        <!-- Social media and link sharing -->
         <div class="mt-4">
             <button class="btn btn-whatsapp" onclick="shareOnWhatsApp()">Share on WhatsApp</button>
             <button class="btn btn-facebook" onclick="shareOnFacebook()">Share on Facebook</button>
-            <button class="btn btn-link" onclick="copyToClipboard('<?= $messageUrl ?>')">Copy Link</button>
+            <button class="btn btn-link" onclick="copyToClipboard(window.location.href)">Copy Link</button>
         </div>
     </div>
 
     <script>
-        // Share on WhatsApp
         function shareOnWhatsApp() {
-            const message = "<?= $encodedMessage ?>";
             const wish_id = <?= $wish_id ?>;
-            const shareMessage = `${message} - Check it out at ${window.location.origin}/message.php?wish_id=${wish_id}`;
+            const message = "<?= htmlspecialchars($customMessage) ?>";
+            const shareMessage = `${message} - Check it out at message.php?wish_id=${wish_id}`;
             window.open(`https://wa.me/?text=${encodeURIComponent(shareMessage)}`, '_blank');
         }
 
-        // Share on Facebook
         function shareOnFacebook() {
-            const shareLink = '<?= $messageUrl ?>';
-            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareLink)}`, '_blank');
+            const url = `message.php?wish_id=<?= $wish_id ?>`;  // Directly link to message.php with the wish_id
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
         }
 
-        // Copy to clipboard
         function copyToClipboard(text) {
             navigator.clipboard.writeText(text)
                 .then(() => alert('Link copied to clipboard!'))
